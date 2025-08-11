@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:expression_evaluator/models/expressionModels.dart';
 import 'package:expression_evaluator/services/api.dart';
+import 'package:expression_evaluator/widget/history.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Expression extends StatefulWidget{
   const Expression({super.key});
@@ -12,7 +17,8 @@ class Expression extends StatefulWidget{
 }
 
 class _ExpressionState extends State<Expression> {
-  final TextEditingController _controller = TextEditingController();
+  final List<Data> history=[];
+  var _controller = TextEditingController();
   var _outPut="";
   var isLoading = false;
   bool validExpression()
@@ -20,7 +26,7 @@ class _ExpressionState extends State<Expression> {
     final text = _controller.text;
     // Add your validation logic here
     for(var i = 0; i < text.length; i++) {
-      if(!RegExp(r'^[0-9+\-*/()\s]+$').hasMatch(text[i])) {
+      if(!RegExp(r'^[0-9+\-*/()^\s]+$').hasMatch(text[i])) {
         return false;
       }
     }
@@ -32,7 +38,13 @@ class _ExpressionState extends State<Expression> {
     });
     if (validExpression()&& _controller.text.isNotEmpty) {
       _outPut= await ApiService.ans(_controller.text);
+      final newData=Data(
+          expression: _controller.text, 
+          result: _outPut, 
+          time: DateTime.now()
+          );
       setState(() {
+        history.add(newData);
         isLoading = false;
       });
       showDialog(
@@ -79,6 +91,7 @@ class _ExpressionState extends State<Expression> {
         ],
       ),
     );
+    await saveHistory();
     } else {
       setState(() {
         isLoading = false;
@@ -103,8 +116,37 @@ class _ExpressionState extends State<Expression> {
       );
     }
   }
+    Future<void> saveHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final historyJson = history.map((d) => d.toJson()).toList();
+    prefs.setString('history', jsonEncode(historyJson));
+  }
+
+  Future<void> loadHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final historyString = prefs.getString('history');
+    if (historyString != null) {
+      final List<dynamic> decoded = jsonDecode(historyString);
+      setState(() {
+        history.clear();
+        history.addAll(decoded.map((e) => Data.fromJson(e)));
+      });
+    }
+  }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  @override
+  void initState() {
+    super.initState();
+    loadHistory();
+  }
   @override
   Widget build(BuildContext context) {
+      final sortedHistory = [...history]..sort((a, b) => b.time.compareTo(a.time));
+
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 50.0),
       child: Column(
@@ -124,7 +166,7 @@ class _ExpressionState extends State<Expression> {
            decoration: InputDecoration(
              labelText: 'Enter expression',
              border: OutlineInputBorder(),
-             hintText: 'e.g. 2 + 2 * 3',
+             hintText: 'e.g. 2 + ( 2 * 3 )',
              
            ),
          ),
@@ -146,6 +188,27 @@ class _ExpressionState extends State<Expression> {
                  fontWeight: FontWeight.bold
                )),
          ),
+          SizedBox(height: 20,),
+          for(final data in sortedHistory)
+          Dismissible(
+            key: ValueKey(data.time.toIso8601String()),
+            direction: DismissDirection.horizontal,
+            onDismissed: (direction){
+              setState(() {
+                history.remove(data);
+              });
+            },
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _controller=TextEditingController(text: data.expression);
+                });
+              },
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              child: History(history: data),
+            ),
+          ),
         ],
       ),
     );

@@ -26,8 +26,8 @@ class _TabsScreenState extends State<TabsScreen> {
         ),
         ),
         centerTitle: true,
-        elevation: 5,
-        shadowColor: Theme.of(context).colorScheme.primary,
+        elevation: 10,
+        shadowColor: Colors.black12,
       ),
       body: content,
       bottomNavigationBar: BottomNavigationBar(
