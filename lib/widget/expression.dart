@@ -20,6 +20,7 @@ class _ExpressionState extends State<Expression> {
   var _outPut = "";
   var isLoading = false;
   bool isHistoryLoading = true;
+  double _opacity = 0.0;
   bool validExpression() {
     final text = _controller.text;
     // Add your validation logic here
@@ -128,12 +129,11 @@ class _ExpressionState extends State<Expression> {
       setState(() {
         history.clear();
         history.addAll(decoded.map((e) => Data.fromJson(e)));
-        isHistoryLoading = false; 
+        isHistoryLoading = false;
       });
-    }
-    else{
+    } else {
       setState(() {
-        isHistoryLoading = false; 
+        isHistoryLoading = false;
       });
     }
   }
@@ -148,6 +148,11 @@ class _ExpressionState extends State<Expression> {
   void initState() {
     super.initState();
     loadHistory();
+    Future.delayed(Duration(milliseconds: 400), () {
+      setState(() {
+        _opacity = 1.0;
+      });
+    });
   }
 
   @override
@@ -204,11 +209,12 @@ class _ExpressionState extends State<Expression> {
           ),
           Row(
             children: [
-              Icon(Icons.history,
-              color: Theme.of(context)
-                          .colorScheme
-                          .onSecondaryContainer
-                          .withOpacity(0.8),
+              Icon(
+                Icons.history,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSecondaryContainer
+                    .withOpacity(0.8),
               ),
               SizedBox(
                 width: 15,
@@ -230,87 +236,99 @@ class _ExpressionState extends State<Expression> {
             thickness: 2,
             height: 20,
           ),
-          isHistoryLoading?Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32),
-              child: CircularProgressIndicator(),
-            ),
-          ):
-          history.isEmpty
-              ? Column(
-                  children: [
-                    Text(
-                      "No history here!",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer
-                                .withOpacity(0.8),
-                          ),
-                    ),
-                    SizedBox(height: 10,),
-                    Image.asset("assets/images/history.gif",
-                    color: Colors.black12.withOpacity(.2),
-                    colorBlendMode: BlendMode.srcATop,
-                    height: 400,
-                    width: 300,
-                    ),
-                  ],
+          isHistoryLoading
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: CircularProgressIndicator(),
+                  ),
                 )
-              : Column(
-                  children: sortedHistory
-                      .map(
-                        (data) => Dismissible(
-                          key: ValueKey(data.time.toIso8601String()),
-                          direction: DismissDirection.horizontal,
-                          onDismissed: (direction) {
-                            setState(() {
-                              history.remove(data);
-                              saveHistory();
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.error,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .inversePrimary,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        "Data is removed",
-                                        style: TextStyle(
+              : history.isEmpty
+                  ? Column(
+                      children: [
+                        AnimatedOpacity(
+                          opacity: _opacity,
+                          duration: Duration(seconds: 2),
+                          child: Text(
+                            "No history here!",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer
+                                      .withOpacity(0.8),
+                                ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Image.asset(
+                          "assets/images/history.gif",
+                          color: Colors.black12.withOpacity(.2),
+                          colorBlendMode: BlendMode.srcATop,
+                          height: 400,
+                          width: 300,
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: sortedHistory
+                          .map(
+                            (data) => Dismissible(
+                              key: ValueKey(data.time.toIso8601String()),
+                              direction: DismissDirection.horizontal,
+                              onDismissed: (direction) {
+                                setState(() {
+                                  history.remove(data);
+                                  saveHistory();
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.error,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .inversePrimary,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            "Data is removed",
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .inversePrimary,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            });
-                          },
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _controller = TextEditingController(
-                                    text: data.expression);
-                              });
-                            },
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: History(history: data),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
+                                    ),
+                                  );
+                                });
+                              },
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _controller = TextEditingController(
+                                        text: data.expression);
+                                  });
+                                },
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                child: History(history: data),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
         ],
       ),
     );
