@@ -196,34 +196,48 @@ class _ExpressionState extends State<Expression> {
             height: 20,
           ),
           Row(
-            
-           children: [
-            Icon(Icons.history),
-            SizedBox(width: 15,),
-            Text(
-              "History",
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onSecondaryContainer.withOpacity(0.8),
-                fontWeight: FontWeight.bold,
+            children: [
+              Icon(Icons.history),
+              SizedBox(
+                width: 15,
               ),
-            
-            ),
-           ],
+              Text(
+                "History",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.8),
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Divider(
             color: Theme.of(context).colorScheme.error,
             thickness: 2,
             height: 20,
           ),
           history.isEmpty
-              ? Center(
-                  child: Text("No history here!",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onSecondaryContainer.withOpacity(0.8),
-                
-              ),
-                  ),
+              ? Column(
+                  children: [
+                    Text(
+                      "No history here!",
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer
+                                .withOpacity(0.8),
+                          ),
+                    ),
+                    SizedBox(height: 20,),
+                    Image.asset("assets/images/history.gif",
+                    
+                    ),
+                  ],
                 )
               : Column(
                   children: sortedHistory
@@ -234,7 +248,8 @@ class _ExpressionState extends State<Expression> {
                           onDismissed: (direction) {
                             setState(() {
                               history.remove(data);
-                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Row(
@@ -242,7 +257,9 @@ class _ExpressionState extends State<Expression> {
                                     children: [
                                       Icon(
                                         Icons.error,
-                                        color: Theme.of(context).colorScheme.inversePrimary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
                                       ),
                                       SizedBox(width: 8),
                                       Text(
@@ -263,7 +280,8 @@ class _ExpressionState extends State<Expression> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                _controller = TextEditingController(text: data.expression);
+                                _controller = TextEditingController(
+                                    text: data.expression);
                               });
                             },
                             splashColor: Colors.transparent,

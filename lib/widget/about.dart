@@ -39,7 +39,10 @@ class About extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          Text(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
             "• Only numbers, +, -, *, /, (, ^, ) and spaces are allowed.",
             style: TextStyle(
                 fontSize: 18, color: Theme.of(context).colorScheme.primary),
@@ -61,6 +64,8 @@ class About extends StatelessWidget {
             "• Spaces are optional and ignored.",
             style: TextStyle(
                 fontSize: 18, color: Theme.of(context).colorScheme.primary),
+          ),
+            ],
           ),
         ],
       ),
