@@ -26,6 +26,10 @@ class _HistoryState extends State<History> {
                   fit: BoxFit.scaleDown,
                   child: Text("${widget.history.expression} = ${widget.history.result}",
                   textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color:Theme.of(context).colorScheme.onSecondaryContainer,
+                fontWeight: FontWeight.bold,
+              ),
                   ),
                 ),
           ),
@@ -37,7 +41,6 @@ class _HistoryState extends State<History> {
               Text(dateFormate.format(widget.history.time),
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color:Theme.of(context).colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.bold,
               ),
               ),
             ],
