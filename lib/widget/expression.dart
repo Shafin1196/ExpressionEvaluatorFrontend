@@ -248,8 +248,6 @@ class _ExpressionState extends State<Expression> {
                     ),
                     SizedBox(height: 10,),
                     Image.asset("assets/images/history.gif",
-                    color: Theme.of(context).colorScheme.inversePrimary.withOpacity(.2),
-                    colorBlendMode: BlendMode.srcATop,
                     height: 400,
                     width: 300,
                     ),
