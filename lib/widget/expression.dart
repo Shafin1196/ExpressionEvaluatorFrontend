@@ -19,6 +19,7 @@ class _ExpressionState extends State<Expression> {
   var _controller = TextEditingController();
   var _outPut = "";
   var isLoading = false;
+  bool isHistoryLoading = true;
   bool validExpression() {
     final text = _controller.text;
     // Add your validation logic here
@@ -127,6 +128,12 @@ class _ExpressionState extends State<Expression> {
       setState(() {
         history.clear();
         history.addAll(decoded.map((e) => Data.fromJson(e)));
+        isHistoryLoading = false; 
+      });
+    }
+    else{
+      setState(() {
+        isHistoryLoading = false; 
       });
     }
   }
@@ -221,6 +228,12 @@ class _ExpressionState extends State<Expression> {
             thickness: 2,
             height: 20,
           ),
+          isHistoryLoading?Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: CircularProgressIndicator(),
+            ),
+          ):
           history.isEmpty
               ? Column(
                   children: [
