@@ -204,7 +204,12 @@ class _ExpressionState extends State<Expression> {
           ),
           Row(
             children: [
-              Icon(Icons.history),
+              Icon(Icons.history,
+              color: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.8),
+              ),
               SizedBox(
                 width: 15,
               ),
@@ -219,9 +224,6 @@ class _ExpressionState extends State<Expression> {
                     ),
               ),
             ],
-          ),
-          SizedBox(
-            height: 10,
           ),
           Divider(
             color: Theme.of(context).colorScheme.error,
