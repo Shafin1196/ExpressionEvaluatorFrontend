@@ -14,39 +14,46 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(bottom: 15),
-      elevation: 10,
+        margin: EdgeInsets.only(bottom: 15),
+        elevation: 10,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-                children: [
-          ListTile(
-            title:
-                FittedBox(
+            children: [
+              ListTile(
+                title: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text("${widget.history.expression} = ${widget.history.result}",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color:Theme.of(context).colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.bold,
-              ),
+                  child: Text(
+                    "${widget.history.expression} = ${widget.history.result}",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.alarm),
-              SizedBox(width: 10,),
-              Text(dateFormate.format(widget.history.time),
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color:Theme.of(context).colorScheme.onSecondaryContainer,
               ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.alarm),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    dateFormate.format(widget.history.time),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
+                  ),
+                ],
               ),
             ],
           ),
-                ],
-              ),
         ));
   }
 }

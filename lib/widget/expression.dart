@@ -233,9 +233,12 @@ class _ExpressionState extends State<Expression> {
                                 .withOpacity(0.8),
                           ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 10,),
                     Image.asset("assets/images/history.gif",
-                    
+                    color: Theme.of(context).colorScheme.inversePrimary.withOpacity(.2),
+                    colorBlendMode: BlendMode.srcATop,
+                    height: 400,
+                    width: 300,
                     ),
                   ],
                 )
