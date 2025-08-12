@@ -12,7 +12,7 @@ class ApiService {
       );
       if(response.statusCode==200){
         final data=jsonDecode(response.body);
-        return data['result'].toString();
+        return double.parse(data['result']).toStringAsFixed(2);
       }
       return 'Error: ${response.statusCode}';
     } catch (e) {

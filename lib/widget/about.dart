@@ -65,6 +65,12 @@ class About extends StatelessWidget {
             style: TextStyle(
                 fontSize: 18, color: Theme.of(context).colorScheme.primary),
           ),
+          SizedBox(height: 5),
+          Text(
+            "• Can't divide by 0",
+            style: TextStyle(
+                fontSize: 18, color: Theme.of(context).colorScheme.primary),
+          ),
             ],
           ),
         ],

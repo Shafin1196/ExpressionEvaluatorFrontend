@@ -248,6 +248,7 @@ class _ExpressionState extends State<Expression> {
                           onDismissed: (direction) {
                             setState(() {
                               history.remove(data);
+                              saveHistory();
                               ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar();
                               ScaffoldMessenger.of(context).showSnackBar(
