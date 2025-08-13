@@ -1,5 +1,6 @@
 import 'package:expression_evaluator/widget/about.dart';
 import 'package:expression_evaluator/widget/expression.dart';
+import 'package:expression_evaluator/widget/operand.dart';
 import 'package:flutter/material.dart';
 
 class TabsScreen extends StatefulWidget{
@@ -38,7 +39,13 @@ class _TabsScreenState extends State<TabsScreen> {
             if (_index == 0) {
               content = Expression();
               barTitle = "Evaluator";
-            } else {
+            } 
+            else if(index==1)
+            {
+              content=Operand();
+              barTitle="Three Operand Generator";
+            }
+            else {
               content = About();
               barTitle = "About";
             }
@@ -51,6 +58,10 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
             label: 'Evaluator',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.auto_mode_rounded),
+            label: 'Three Operand',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.info),

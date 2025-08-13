@@ -1,20 +1,22 @@
 import 'dart:convert';
+
 import 'package:expression_evaluator/models/expressionModels.dart';
 import 'package:expression_evaluator/services/api.dart';
 import 'package:expression_evaluator/widget/history.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Expression extends StatefulWidget {
-  const Expression({super.key});
+class Operand extends StatefulWidget{
+  const Operand({super.key});
 
   @override
-  State<Expression> createState() {
-    return _ExpressionState();
+  State<Operand> createState() {
+   return _OperandState();
   }
+
 }
 
-class _ExpressionState extends State<Expression> {
+class _OperandState extends State<Operand>{
   final List<Data> history = [];
   var _controller = TextEditingController();
   var _outPut = "";
@@ -25,7 +27,7 @@ class _ExpressionState extends State<Expression> {
     final text = _controller.text;
     // Add your validation logic here
     for (var i = 0; i < text.length; i++) {
-      if (!RegExp(r'^[0-9+\-*/()^\s]+$').hasMatch(text[i])) {
+      if (!RegExp(r'^[0-9a-zA-Z+\-*=/()\s]+$').hasMatch(text[i])) {
         return false;
       }
     }
@@ -37,7 +39,7 @@ class _ExpressionState extends State<Expression> {
       isLoading = true;
     });
     if (validExpression() && _controller.text.isNotEmpty) {
-      _outPut = await ApiService.ans(_controller.text);
+      _outPut = await ApiService.operand(_controller.text);
       final newData = Data(
           expression: _controller.text, result: _outPut, time: DateTime.now());
       setState(() {
@@ -57,7 +59,7 @@ class _ExpressionState extends State<Expression> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '${_controller.text} = ${_outPut}',
+                '${_controller.text} :\n${_outPut}',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -118,12 +120,12 @@ class _ExpressionState extends State<Expression> {
   Future<void> saveHistory() async {
     final prefs = await SharedPreferences.getInstance();
     final historyJson = history.map((d) => d.toJson()).toList();
-    prefs.setString('history', jsonEncode(historyJson));
+    prefs.setString('historys', jsonEncode(historyJson));
   }
 
   Future<void> loadHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    final historyString = prefs.getString('history');
+    final historyString = prefs.getString('historys');
     if (historyString != null) {
       final List<dynamic> decoded = jsonDecode(historyString);
       setState(() {
@@ -195,7 +197,7 @@ class _ExpressionState extends State<Expression> {
                       strokeWidth: 4.0,
                     ),
                   )
-                : Text('Evaluate',
+                : Text('Generate',
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
@@ -323,7 +325,7 @@ class _ExpressionState extends State<Expression> {
                                 },
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
-                                child: History(history: data,isEvaluate: true,),
+                                child: History(history: data,isEvaluate: false,),
                               ),
                             ),
                           )
@@ -333,4 +335,5 @@ class _ExpressionState extends State<Expression> {
       ),
     );
   }
+
 }

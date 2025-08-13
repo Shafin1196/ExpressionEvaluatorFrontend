@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class History extends StatefulWidget {
-  const History({super.key, required this.history});
+  const History({super.key, required this.history,required this.isEvaluate});
   final Data history;
+  final bool isEvaluate;
   @override
   State<History> createState() => _HistoryState();
 }
@@ -24,7 +25,10 @@ class _HistoryState extends State<History> {
                 title: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    "${widget.history.expression} = ${widget.history.result}",
+                    widget.isEvaluate?
+                    "${widget.history.expression} = ${widget.history.result}":
+                    "${widget.history.expression} :\n${widget.history.result}"
+                    ,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context)
