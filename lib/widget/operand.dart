@@ -180,7 +180,7 @@ class _OperandState extends State<Operand>{
             decoration: InputDecoration(
               labelText: 'Enter expression',
               border: OutlineInputBorder(),
-              hintText: 'e.g. 2 + ( 2 * 3 )',
+              hintText: 'e.g. a = b + ( c * d )',
             ),
           ),
           SizedBox(
