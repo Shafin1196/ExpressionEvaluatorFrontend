@@ -268,7 +268,7 @@ class _OperandState extends State<Operand>{
                           height: 10,
                         ),
                         Image.asset(
-                          "assets/images/history.gif",
+                          "assets/images/history2.gif",
                           color: Colors.black12.withOpacity(.2),
                           colorBlendMode: BlendMode.srcATop,
                           height: 400,
